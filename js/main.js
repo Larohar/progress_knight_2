@@ -1477,7 +1477,7 @@ gameData.requirements = {
 	"Rebirth note 6": new TaskRequirement([document.getElementById("rebirthNote6")], [{task: "Cosmic Recollection", requirement: 1}]),
     "Evil info": new EvilRequirement([document.getElementById("evilInfo")], [{requirement: 1}]),
 	"Essence info": new EssenceRequirement([document.getElementById("essenceInfo")], [{requirement: 1}]),
-    "Time warping info": new TaskRequirement([document.getElementById("timeWarping")], [{requirement: gameData.itemData["Stopwatch"].getExpense() * 100}]),
+    "Time warping info": new CoinRequirement([document.getElementById("timeWarping")], [{requirement: gameData.itemData["Stopwatch"].getExpense() * 100}]),
 
     "Automation": new AgeRequirement([document.getElementById("automation")], [{requirement: 20}]),
     "Quick task display": new AgeRequirement([document.getElementById("quickTaskDisplay")], [{requirement: 20}]),
