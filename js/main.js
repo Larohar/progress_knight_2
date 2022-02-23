@@ -100,7 +100,7 @@ const skillBaseData = {
     "Life Essence": {name: "Life Essence", maxXp: 100, effect: 0.01, description: "Longer Lifespan"},
     "Time Warping": {name: "Time Warping", maxXp: 100, effect: 0.01, description: "Gamespeed"},
     "Astral Body": {name: "Astral Body", maxXp: 100, effect: 0.0035, description: "Longer lifespan"},
-	"Temporal Dimension": {name: "Temporal Dimension", maxXp: 100, effect: 0.05, description: "Gamespeed"},
+	"Temporal Dimension": {name: "Temporal Dimension", maxXp: 100, effect: 0.005, description: "Gamespeed"},
 	"All Seeing Eye": {name: "All Seeing Eye", maxXp: 100, effect: 0.0027, description: "T.A.A Pay"},
 	"Brainwashing": {name: "Brainwashing", maxXp: 100, effect: -0.01, description: "Reduced Expenses"},
 	
