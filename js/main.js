@@ -161,11 +161,12 @@ const itemBaseData = {
     "Dumbbells": {name: "Dumbbells", expense: 50, effect: 1.5, description: "Strength XP"},
     "Personal Squire": {name: "Personal Squire", expense: 200, effect: 2, description: "Class XP"},
     "Steel Longsword": {name: "Steel Longsword", expense: 1000, effect: 2, description: "Military XP"},
-    "Stopwatch": {name: "Stopwatch", expense: 4000, effect: 2, description: "Gamespeed"},
+    "Magic Stopwatch": {name: "Magic Stopwatch", expense: 2500, effect: 2, description: "Gamespeed"},
     "Butler": {name: "Butler", expense: 7500, effect: 1.5, description: "Happiness"},
     "Sapphire Charm": {name: "Sapphire Charm", expense: 50000, effect: 3, description: "Magic XP"},
     "Study Desk": {name: "Study Desk", expense: 1000000, effect: 2, description: "Ability XP"},
     "Library": {name: "Library", expense: 10000000, effect: 2, description: "Ability XP"},
+    "Stopwatch Overcharge": {name: "Stopwatch Overcharge", expense: 30000000, effect: 1.5, description: "Gamespeed"},
 	"Observatory": {name: "Observatory", expense: 140000000, effect: 5, description: "Magic XP"},
 	"Mind's Eye": {name: "Mind's Eye", expense: 3250000000, effect: 10, description: "Fundamentals XP"},
 	"Void Necklace": {name: "Void Necklace", expense: 28050000000, effect: 3, description: "Void Manipulation XP"},
@@ -201,7 +202,7 @@ const skillCategories = {
 
 const itemCategories = {
     "Properties"             : ["Homeless", "Tent", "Wooden Hut", "Cottage", "House", "Large House", "Small Palace", "Grand Palace", "Town Ruler", "City Ruler", "Nation Ruler", "Pocket Dimension", "Void Realm", "Void Universe", "Astral Realm", "Galactic Throne"],
-    "Misc"                   : ["Book", "Dumbbells", "Personal Squire", "Steel Longsword", "Stopwatch", "Butler", "Sapphire Charm", "Study Desk", "Library", "Observatory", "Mind's Eye", "Void Necklace", "Void Armor", "Void Blade", "Void Orb", "Void Dust", "Celestial Robe", "Universe Fragment", "Multiverse Fragment"]
+    "Misc"                   : ["Book", "Dumbbells", "Personal Squire", "Steel Longsword", "Magic Stopwatch", "Butler", "Sapphire Charm", "Study Desk", "Library", "Stopwatch Overcharge", "Observatory", "Mind's Eye", "Void Necklace", "Void Armor", "Void Blade", "Void Orb", "Void Dust", "Celestial Robe", "Universe Fragment", "Multiverse Fragment"]
 }
 
 const headerRowColors = {
@@ -344,11 +345,12 @@ const tooltips = {
     "Dumbbells": "Heavy tools used in strenuous exercise to toughen up and accumulate strength even faster than before. ",
     "Personal Squire": "Assists you in completing day to day activities, giving you more time to be productive at work.",
     "Steel Longsword": "A fine blade used to slay enemies even quicker in combat and therefore gain more experience.",
-    "Stopwatch": "A simple tool that helps you shave off some seconds from even the most basic of tasks.",
+    "Magic Stopwatch": "A simple tool that helps you shave off some seconds from even the most basic of tasks. Or does it?!",
     "Butler": "Keeps your household clean at all times and also prepares three delicious meals per day, leaving you in a happier, stress-free mood.",
     "Sapphire Charm": "Embedded with a rare sapphire, this charm activates more mana channels within your body, providing a much easier time learning magic.",
     "Study Desk": "A dedicated area which provides many fine stationary and equipment designed for furthering your progress in research.",
     "Library": "Stores a collection of books, each containing vast amounts of information from basic life skills to complex magic spells.",
+	"Stopwatch Overcharge": "The Magic Stopwatch gets even more potent when overcharging it.",
 	"Observatory": "Used for observing terrestrial, marine and celestial events.",
 	"Mind's Eye": "Lets you see memories, remember images, and even see new pictures and ideas.",
 	"Void Necklace": "Helps you shape and manipulate void matter, even transmute it and rebuild into anything of your choosing.",
@@ -569,8 +571,11 @@ function getGameSpeed() {
     var timeWarping = gameData.taskData["Time Warping"]
 	var temporalDimension = gameData.taskData["Temporal Dimension"]
 	var timeLoop = gameData.taskData["Time Loop"]
-	var stopwatch = gameData.itemData["Stopwatch"]
-    var timeWarpingSpeed = gameData.timeWarpingEnabled ? timeWarping.getEffect() * stopwatch.getEffect() * temporalDimension.getEffect() * timeLoop.getEffect() : 1
+	var stopwatch = gameData.itemData["Magic Stopwatch"]
+	var stopwatchOC = gameData.itemData["Stopwatch Overcharge"]
+	var stopwatchEffect = stopwatch.getEffect();
+	stopwatchEffect = stopwatchEffect > 1 ? stopwatchEffect * stopwatchOC.getEffect() : 1
+    var timeWarpingSpeed = gameData.timeWarpingEnabled ? timeWarping.getEffect() * stopwatchEffect * temporalDimension.getEffect() * timeLoop.getEffect() : 1
     var gameSpeed = baseGameSpeed * +!gameData.paused * +isAlive() * timeWarpingSpeed
     return gameSpeed
 }
@@ -886,7 +891,11 @@ function updateText() {
 	document.getElementById("essenceDisplay").textContent = gameData.essence.toFixed(1)
 	document.getElementById("essenceGainDisplay").textContent = getEssenceGain().toFixed(1)
 
-    document.getElementById("timeWarpingDisplay").textContent = "x" + (gameData.taskData["Time Warping"].getEffect() * gameData.itemData["Stopwatch"].getEffect() * gameData.taskData["Temporal Dimension"].getEffect() * gameData.taskData["Time Loop"].getEffect()).toFixed(1)
+	var stopwatch = gameData.itemData["Magic Stopwatch"]
+	var stopwatchOC = gameData.itemData["Stopwatch Overcharge"]
+	var stopwatchEffect = stopwatch.getEffect();
+	stopwatchEffect = stopwatchEffect > 1 ? stopwatchEffect * stopwatchOC.getEffect() : 1
+    document.getElementById("timeWarpingDisplay").textContent = "x" + (stopwatchEffect * gameData.taskData["Time Warping"].getEffect() * gameData.taskData["Temporal Dimension"].getEffect() * gameData.taskData["Time Loop"].getEffect()).toFixed(1)
     document.getElementById("timeWarpingButton").textContent = gameData.timeWarpingEnabled ? "Disable warp" : "Enable warp"
 	}
 
@@ -1477,7 +1486,7 @@ gameData.requirements = {
 	"Rebirth note 6": new TaskRequirement([document.getElementById("rebirthNote6")], [{task: "Cosmic Recollection", requirement: 1}]),
     "Evil info": new EvilRequirement([document.getElementById("evilInfo")], [{requirement: 1}]),
 	"Essence info": new EssenceRequirement([document.getElementById("essenceInfo")], [{requirement: 1}]),
-    "Time warping info": new CoinRequirement([document.getElementById("timeWarping")], [{requirement: gameData.itemData["Stopwatch"].getExpense() * 100}]),
+    "Time warping info": new CoinRequirement([document.getElementById("timeWarping")], [{requirement: gameData.itemData["Magic Stopwatch"].getExpense() * 100}]),
 
     "Automation": new AgeRequirement([document.getElementById("automation")], [{requirement: 20}]),
     "Quick task display": new AgeRequirement([document.getElementById("quickTaskDisplay")], [{requirement: 20}]),
@@ -1611,11 +1620,12 @@ gameData.requirements = {
     "Dumbbells": new CoinRequirement([getItemElement("Dumbbells")], [{requirement: gameData.itemData["Dumbbells"].getExpense() * 100}]),
     "Personal Squire": new CoinRequirement([getItemElement("Personal Squire")], [{requirement: gameData.itemData["Personal Squire"].getExpense() * 100}]),
     "Steel Longsword": new CoinRequirement([getItemElement("Steel Longsword")], [{requirement: gameData.itemData["Steel Longsword"].getExpense() * 100}]),
+    "Magic Stopwatch": new CoinRequirement([getItemElement("Magic Stopwatch")], [{requirement: gameData.itemData["Magic Stopwatch"].getExpense() * 100}]), 
     "Butler": new CoinRequirement([getItemElement("Butler")], [{requirement: gameData.itemData["Butler"].getExpense() * 100}]),
     "Sapphire Charm": new CoinRequirement([getItemElement("Sapphire Charm")], [{requirement: gameData.itemData["Sapphire Charm"].getExpense() * 100}]),
     "Study Desk": new CoinRequirement([getItemElement("Study Desk")], [{requirement: gameData.itemData["Study Desk"].getExpense() * 100}]),
     "Library": new CoinRequirement([getItemElement("Library")], [{requirement: gameData.itemData["Library"].getExpense() * 100}]),
-    "Stopwatch": new CoinRequirement([getItemElement("Stopwatch")], [{requirement: gameData.itemData["Stopwatch"].getExpense() * 100}]), 
+    "Stopwatch Overcharge": new CoinRequirement([getItemElement("Stopwatch Overcharge")], [{requirement: gameData.itemData["Stopwatch Overcharge"].getExpense() * 100}]), 
 	"Observatory": new CoinRequirement([getItemElement("Observatory")], [{requirement: gameData.itemData["Observatory"].getExpense() * 100}]),
 	"Mind's Eye": new CoinRequirement([getItemElement("Mind's Eye")], [{requirement: gameData.itemData["Mind's Eye"].getExpense() * 100}]),
 	"Void Necklace": new CoinRequirement([getItemElement("Void Necklace")], [{requirement: gameData.itemData["Void Necklace"].getExpense() * 100}]),
