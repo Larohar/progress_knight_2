@@ -1105,7 +1105,7 @@ function formatCoins(coins, element) {
         element.children[i].style.color = colors[tier]
         i += 1
     }
-    if (leftOver == 0 && coins > 0 || coins > 1e9) {element.children[3].textContent = ""; return}
+    if (leftOver == 0 && coins > 0 || coins > 1e6) {element.children[3].textContent = ""; return}
     var text = String(Math.floor(leftOver)) + "c"
     element.children[3].textContent = text
     element.children[3].style.color = colors["c"]
