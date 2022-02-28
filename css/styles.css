@@ -178,3 +178,8 @@ button:focus {
     display: flex;
     flex-direction: column;
 }
+
+.maxLevel {
+    white-space: nowrap;
+    overflow: hidden;
+}
