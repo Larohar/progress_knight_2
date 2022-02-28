@@ -1445,6 +1445,9 @@ window.addEventListener('keydown', function(e) {
         if (gameData.days < 365000 && gameData.days + increase > 365000 && autoPause){
             gameData.paused = true;
         }
+	if (gameData.days < 3650000 && gameData.days + increase > 3650000 && autoPause){
+            gameData.paused = true;
+        }
         gameData.days += increase
     }
 })()
